@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nashville Marketing Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+        }
+        .dropdown-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .data-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .data-box {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .data-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        canvas {
+            max-width: 600px;
+            margin: 20px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nashville Marketing Report</h1>
+    <div class="dropdown-container">
+        <label for="monthSelect">Select a month:</label>
+        <select id="monthSelect">
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+        </select>
+    </div>
+
+    <div class="data-container" id="dataContainer">
+        <!-- Data will be dynamically inserted here -->
+    </div>
+
+    <canvas id="revenueChart"></canvas>
+
+    <script>
+        const data = {
+            "October": {
+                "Ad Spend": "US$8,943.39",
+                "Leads": 324,
+                "Revenue": "US$24,420",
+                "ROI": "173.05%",
+                "Conversion Rate": "13.89%",
+                "Conversions": 45,
+                "Clicks": 946
+            },
+            "November": {
+                "Ad Spend": "US$8,118.18",
+                "Leads": 302,
+                "Revenue": "US$27,759",
+                "ROI": "241.94%",
+                "Conversion Rate": "12.25%",
+                "Conversions": 37,
+                "Clicks": 921
+            },
+            "December": {
+                "Ad Spend": "US$1,124.14",
+                "Leads": 162,
+                "Revenue": "US$10,693",
+                "ROI": "851.22%",
+                "Conversion Rate": "5.56%",
+                "Conversions": 9,
+                "Clicks": 127
+            }
+        };
+
+        const revenueData = {
+            "October": 24420,
+            "November": 27759,
+            "December": 10693
+        };
+
+        const monthSelect = document.getElementById("monthSelect");
+        const dataContainer = document.getElementById("dataContainer");
+        const revenueChartCanvas = document.getElementById("revenueChart");
+
+        const updateDataDisplay = (month) => {
+            dataContainer.innerHTML = ""; // Clear existing data
+            const monthData = data[month];
+            for (const key in monthData) {
+                const dataBox = document.createElement("div");
+                dataBox.classList.add("data-box");
+
+                const title = document.createElement("div");
+                title.classList.add("data-title");
+                title.textContent = key;
+
+                const value = document.createElement("div");
+                value.textContent = monthData[key];
+
+                dataBox.appendChild(title);
+                dataBox.appendChild(value);
+                dataContainer.appendChild(dataBox);
+            }
+        };
+
+        const renderChart = () => {
+            new Chart(revenueChartCanvas, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(revenueData),
+                    datasets: [{
+                        label: 'Revenue (US$)',
+                        data: Object.values(revenueData),
+                        backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+                        borderColor: ['rgba(75, 192, 192, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        };
+
+        monthSelect.addEventListener("change", (e) => {
+            updateDataDisplay(e.target.value);
+        });
+
+        // Initialize with October data and render chart
+        updateDataDisplay("October");
+        renderChart();
+    </script>
+</body>
+</html>
